@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.log4j.Logger;
 import org.freedom.activity.EmployeeManagement.model.Department;
 import org.freedom.activity.EmployeeManagement.service.DepartmentService;
 
@@ -23,7 +24,7 @@ import org.freedom.activity.EmployeeManagement.service.DepartmentService;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class DepartmentResource {
-
+	private Logger logger = Logger.getLogger(DepartmentResource.class);
 	DepartmentService departmentService = new DepartmentService();
 
 	/*
@@ -35,6 +36,7 @@ public class DepartmentResource {
 		GenericEntity<List<Department>> entity = new GenericEntity<List<Department>>(
 				departmentService.getAllDepartments()) {
 		};
+		logger.info("Fetching all the departments");
 		return Response.ok().entity(entity).build();
 	}
 
@@ -46,7 +48,7 @@ public class DepartmentResource {
 	@GET
 	@Path("/{dept_id}")
 	public Response getDepartment(@PathParam("dept_id") int dept_id) throws ClassNotFoundException, SQLException {
-
+		logger.info("Fetching department with ID= " + dept_id);
 		return Response.ok().entity(departmentService.getDepartment(dept_id)).build();
 	}
 
@@ -73,16 +75,6 @@ public class DepartmentResource {
 		};
 		return Response.ok().entity(entity).build();
 	}
-
-	/* Unable to implement PATCH in this API service */
-	// @PATCH
-	// @Path("/{dept_id}")
-	// public Department updateDepartmentItem(@PathParam("dept_id") int dept_id,
-	// InputStream is) throws ClassNotFoundException, SQLException
-	// {
-	// //department.setDept_id(dept_id);
-	// return departmentService.updateDepartmentItem(dept_id, is);
-	// }
 
 	/* @DELETE service to delete a particular department from the database */
 

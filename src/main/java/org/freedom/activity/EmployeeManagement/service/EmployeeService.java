@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.freedom.activity.EmployeeManagement.database.DataServiceHelper;
-import org.freedom.activity.EmployeeManagement.database.DatabaseClass;
 import org.freedom.activity.EmployeeManagement.exception.DataNotFoundException;
 import org.freedom.activity.EmployeeManagement.model.Department;
 import org.freedom.activity.EmployeeManagement.model.Employee;
@@ -16,8 +15,6 @@ import org.freedom.activity.EmployeeManagement.model.Employee;
 public class EmployeeService {
 
 	private DataServiceHelper dataServiceHelper;
-	private Map<Long, Department> employeeMap = DatabaseClass.getDepartments();
-	private static final Logger logger = Logger.getLogger(EmployeeService.class);
 
 	public EmployeeService() {
 		dataServiceHelper = new DataServiceHelper();
@@ -163,8 +160,8 @@ public class EmployeeService {
 	 * department
 	 */
 	public Employee addEmployee(int dept_id, Employee employee) throws ClassNotFoundException, SQLException {
-
 		boolean flag = true;
+
 		String query = " insert into employee (emp_lname, emp_fname, emp_email, emp_phone, emp_gender, emp_age, emp_YOJ, dept_id)"
 				+ " values (?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -176,7 +173,6 @@ public class EmployeeService {
 
 	/* This method will be called to update a particular employee */
 	public Employee updateEmployee(int dept_id, Employee employee) throws ClassNotFoundException, SQLException {
-
 		String query = "update employee set emp_lname = ?, emp_fname = ?, emp_email =?, emp_phone=?, emp_gender=?,emp_age=?, emp_YOJ=?,  dept_id=? WHERE emp_id="
 				+ employee.getEmp_id();
 		dataServiceHelper.insertEmployeeQuery(query, employee, dept_id, false);

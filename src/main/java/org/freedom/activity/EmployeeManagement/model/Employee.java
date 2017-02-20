@@ -105,4 +105,13 @@ public class Employee {
 		this.emp_YOJ = emp_YOJ;
 	}
 
+	@Override
+	public String toString() {
+		return "Employee [emp_id=" + emp_id + ", emp_lname=" + emp_lname + ", emp_fname=" + emp_fname + ", emp_email="
+				+ emp_email + ", emp_phone=" + emp_phone + ", emp_gender=" + emp_gender + ", emp_age=" + emp_age
+				+ ", emp_YOJ=" + emp_YOJ + ", dept_id=" + dept_id + "]";
+	}
+	
+	
+
 }

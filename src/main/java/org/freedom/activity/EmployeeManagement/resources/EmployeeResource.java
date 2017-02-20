@@ -17,6 +17,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.log4j.Logger;
 import org.freedom.activity.EmployeeManagement.model.Department;
 import org.freedom.activity.EmployeeManagement.model.Employee;
 import org.freedom.activity.EmployeeManagement.resources.beans.EmployeeFilterBean;
@@ -25,6 +26,7 @@ import org.freedom.activity.EmployeeManagement.service.EmployeeService;
 public class EmployeeResource {
 	GenericEntity entity;
 	EmployeeService employeeService = new EmployeeService();
+	private Logger logger = Logger.getLogger(EmployeeResource.class);
 
 	/*
 	 * @GET service to fetch the employee content of a particular department
@@ -42,6 +44,7 @@ public class EmployeeResource {
 			entity = new GenericEntity<List<Employee>>(
 					employeeService.getEmployeesByYOJ(employeeBean.getDept_id(), employeeBean.getEmp_YOJ())) {
 			};
+			logger.info("Fetching employee details of queried year of joining");
 			return Response.ok().entity(entity).build();
 		}
 
@@ -51,6 +54,7 @@ public class EmployeeResource {
 			entity = new GenericEntity<List<Employee>>(
 					employeeService.getEmployeesByGender(employeeBean.getDept_id(), employeeBean.getEmp_gender())) {
 			};
+			logger.info("Fetching employee details of queried gender");
 			return Response.ok().entity(entity).build();
 		}
 		/* Checks if the GET query consists of any filter related to emp_age */
@@ -59,6 +63,7 @@ public class EmployeeResource {
 			entity = new GenericEntity<List<Employee>>(
 					employeeService.getEmployeesByAge(employeeBean.getDept_id(), employeeBean.getEmp_age())) {
 			};
+			logger.info("Fetching employee details of the queried age");
 			return Response.ok().entity(entity).build();
 		}
 		/* Checks if the GET query consists of any paginated request */
@@ -67,12 +72,13 @@ public class EmployeeResource {
 			entity = new GenericEntity<List<Employee>>(employeeService.getAllEmployeesPaginated(
 					employeeBean.getDept_id(), employeeBean.getStart(), employeeBean.getSize())) {
 			};
-
+			logger.info("Fetching employee details that match the paginated request");
 			return Response.ok().entity(entity).build();
 		}
 
 		entity = new GenericEntity<List<Employee>>(employeeService.getAllEmployees(employeeBean.getDept_id())) {
 		};
+		logger.info("Fetching all employee details");
 		return Response.ok().entity(entity).build();
 
 	}
@@ -92,6 +98,7 @@ public class EmployeeResource {
 		entity = new GenericEntity<Employee>(
 				employeeService.getEmployee(employeeBean.getDept_id(), employeeBean.getEmp_id())) {
 		};
+		logger.info("Fetching the detail of employee " + employeeBean.getEmp_id());
 		return Response.ok().entity(entity).build();
 	}
 

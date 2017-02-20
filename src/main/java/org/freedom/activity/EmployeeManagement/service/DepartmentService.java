@@ -7,13 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.freedom.activity.EmployeeManagement.database.DataServiceHelper;
-import org.freedom.activity.EmployeeManagement.database.DatabaseClass;
 import org.freedom.activity.EmployeeManagement.exception.DataNotFoundException;
 import org.freedom.activity.EmployeeManagement.model.Department;
 
 public class DepartmentService {
 
-	private Map<Long, Department> departmentMap = DatabaseClass.getDepartments();
 	private DataServiceHelper dataServiceHelper;
 
 	public DepartmentService() {
@@ -94,11 +92,11 @@ public class DepartmentService {
 	 * This method will be called to remove a particular department from the
 	 * database
 	 */
-	public Department removeDepartment(int dept_id) throws ClassNotFoundException, SQLException {
+	public void removeDepartment(int dept_id) throws ClassNotFoundException, SQLException {
 
 		String query = "delete from department where dept_id=?";
 		dataServiceHelper.deleteDepartment(query, dept_id);
-		return departmentMap.remove(dept_id);
+
 	}
 
 }

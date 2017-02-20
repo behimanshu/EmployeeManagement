@@ -10,10 +10,12 @@ import java.sql.Statement;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
 import org.freedom.activity.EmployeeManagement.model.Department;
 import org.freedom.activity.EmployeeManagement.model.Employee;
 
 public class DataServiceHelper {
+	private static Logger logger = Logger.getLogger(DataServiceHelper.class);
 	public static DataServiceHelper dataServiceHelper = null;
 	private Connection con = null;
 	DataSource dataSource = null;
@@ -81,7 +83,11 @@ public class DataServiceHelper {
 		statement.setString(2, department.getDept_location());
 		statement.setString(3, department.getDept_expertise());
 		statement.setInt(4, department.getDept_size());
-		statement.execute();
+		boolean response = statement.execute();
+		if(response)
+			logger.info("Successfully inserted department details");
+		else
+			logger.error("Oops! something went wrong while inserting department details");
 		closeConnection();
 	}
 
@@ -103,7 +109,11 @@ public class DataServiceHelper {
 		} else {
 			statement.setInt(8, employee.getDept_id());
 		}
-		statement.execute();
+		boolean response = statement.execute();
+		if(response)
+			logger.info("Successfully inserted employee details");
+		else
+			logger.error("Oops! something went wrong while inserting employee details");
 		closeConnection();
 	}
 
@@ -113,7 +123,11 @@ public class DataServiceHelper {
 		Connection con = getConnection();
 		PreparedStatement statement = con.prepareStatement(query);
 		statement.setInt(1, dept_id);
-		statement.execute();
+		boolean response = statement.execute();
+		if(response)
+			logger.info("Successfully deleted department details");
+		else
+			logger.error("Oops! something went wrong while deleting department details");
 		closeConnection();
 	}
 
@@ -126,7 +140,11 @@ public class DataServiceHelper {
 		Connection con = getConnection();
 		PreparedStatement statement = con.prepareStatement(query);
 		statement.setInt(1, emp_id);
-		statement.execute();
+		boolean response = statement.execute();
+		if(response)
+			logger.info("Successfully deleted employee details");
+		else
+			logger.error("Oops! something went wrong while deleting employee details");
 		closeConnection();
 	}
 

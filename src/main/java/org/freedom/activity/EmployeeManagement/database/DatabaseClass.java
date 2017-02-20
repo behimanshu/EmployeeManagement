@@ -1,5 +1,8 @@
 package org.freedom.activity.EmployeeManagement.database;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,18 +14,15 @@ public class DatabaseClass {
 	private static Map<Long, Employee> employeeMap = new HashMap<>();
 	private static Map<Long, Department> departmentMap = new HashMap<>();
 	
-	
-	public static Map<Long, Employee> getEmployees()
-	{
+
+	public static Map<Long, Employee> getEmployees() {
 		return employeeMap;
-		
+
 	}
-	
-	public static Map<Long, Department> getDepartments()
-	{
+
+	public static Map<Long, Department> getDepartments() {
 		return departmentMap;
-		
+
 	}
-	
 
 }

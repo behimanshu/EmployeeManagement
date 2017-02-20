@@ -8,37 +8,34 @@ import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 public class Department {
-	
-	private long dept_id;
+
+	private int dept_id;
 	private String dept_name;
 	private String dept_location;
-	private long dept_size;
+	private int dept_size;
 	private String dept_expertise;
 	private Map<Long, Employee> deptEmployeeMap = new HashMap<>();
-	
-	
-	public Department(long dept_id, String dept_name, String dept_location, long dept_size, String dept_expertise) {
+
+	public Department(int dept_id, String dept_name, String dept_location, int dept_size, String dept_expertise,
+			Map<Long, Employee> deptEmployeeMap) {
 		super();
 		this.dept_id = dept_id;
 		this.dept_name = dept_name;
 		this.dept_location = dept_location;
 		this.dept_size = dept_size;
 		this.dept_expertise = dept_expertise;
+		this.deptEmployeeMap = deptEmployeeMap;
 	}
 	
-	
-
 	public Department() {
-		
+		super();
 	}
 
-
-
-	public long getDept_id() {
+	public int getDept_id() {
 		return dept_id;
 	}
 
-	public void setDept_id(long dept_id) {
+	public void setDept_id(int dept_id) {
 		this.dept_id = dept_id;
 	}
 
@@ -58,11 +55,11 @@ public class Department {
 		this.dept_location = dept_location;
 	}
 
-	public long getDept_size() {
+	public int getDept_size() {
 		return dept_size;
 	}
 
-	public void setDept_size(long dept_size) {
+	public void setDept_size(int dept_size) {
 		this.dept_size = dept_size;
 	}
 
@@ -74,9 +71,9 @@ public class Department {
 		this.dept_expertise = dept_expertise;
 	}
 
-
-@XmlTransient //To ensure that all the employees do not show up for the department
-
+	
+	
+@XmlTransient	
 	public Map<Long, Employee> getDeptEmployeeMap() {
 		return deptEmployeeMap;
 	}
@@ -84,8 +81,7 @@ public class Department {
 	public void setDeptEmployeeMap(Map<Long, Employee> deptEmployeeMap) {
 		this.deptEmployeeMap = deptEmployeeMap;
 	}
-	
-	
+
 	
 
 }

@@ -1,58 +1,104 @@
 package org.freedom.activity.EmployeeManagement.service;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.freedom.activity.EmployeeManagement.database.DataServiceHelper;
 import org.freedom.activity.EmployeeManagement.database.DatabaseClass;
+import org.freedom.activity.EmployeeManagement.exception.DataNotFoundException;
 import org.freedom.activity.EmployeeManagement.model.Department;
 
 public class DepartmentService {
 
-private Map<Long, Department> departmentMap = DatabaseClass.getDepartments();
-	
-	public DepartmentService()
-	{
-		departmentMap.put(1L, new Department(1, "Science", "Charlotte", 25, "Analytics"));
-		departmentMap.put(2L, new Department(2, "Social", "Salisbury", 890, "Analytics"));
+	private Map<Long, Department> departmentMap = DatabaseClass.getDepartments();
+	private DataServiceHelper dataServiceHelper;
+
+	public DepartmentService() {
+
+		dataServiceHelper = new DataServiceHelper();
 	}
-	
-	
-	public List<Department> getAllDepartments()
-	{
+
+	public Department departmentMapping(ResultSet deptRS) throws SQLException {
+		Department department = new Department();
+		department.setDept_id(deptRS.getInt("dept_id"));
+		department.setDept_location(deptRS.getString("dept_location"));
+		department.setDept_expertise(deptRS.getString("dept_expertise"));
+		department.setDept_name(deptRS.getString("dept_name"));
+		department.setDept_size(deptRS.getInt("dept_size"));
+		return department;
+	}
+
+	/*
+	 * This method will be called to retrieve the list of all departments in the
+	 * database
+	 */
+	public List<Department> getAllDepartments() throws ClassNotFoundException, SQLException {
+		ResultSet deptRS = dataServiceHelper.executeQuery("Select * from department");
 		List<Department> departmentList = new ArrayList<>();
-		departmentList.addAll(departmentMap.values());
+		while (deptRS.next()) {
+			Department department = departmentMapping(deptRS);
+			departmentList.add(department);
+		}
+		if (departmentList.isEmpty()) {
+			throw new DataNotFoundException("No Departments exist in the database");
+		}
 		return departmentList;
 	}
-	
-	public Department getDepartment(Long dept_id)
-	{
-		return departmentMap.get(dept_id);
-	}
-	
-	public Department addDepartment(Department department)
-	{
-		department.setDept_id(departmentMap.size()+1);
-		departmentMap.put(department.getDept_id(), department);
+
+	/*
+	 * This method will be called to retrieve a department of a particular
+	 * dept_id
+	 */
+	public Department getDepartment(int dept_id) throws ClassNotFoundException, SQLException {
+
+		ResultSet deptRS = dataServiceHelper.executeQuery("Select * from department where dept_id=" + dept_id);
+		Department department = null;
+		while (deptRS.next()) {
+			department = departmentMapping(deptRS);
+
+		}
+
+		if (department == null) {
+			throw new DataNotFoundException("Department with ID " + dept_id + " not found");
+
+		}
 		return department;
 	}
-	
 
-	public Department updateDepartment(Department department)
-	{
-		
-		if(department.getDept_id()<0)
-		{
+	/* This method will be called to insert a new department in the database */
+	public Department addDepartment(Department department) throws ClassNotFoundException, SQLException {
+
+		String query = " insert into department (dept_name, dept_location, dept_expertise,  dept_size)"
+				+ " values (?, ?, ?, ?)";
+
+		dataServiceHelper.insertDepartmentQuery(query, department);
+		return department;
+	}
+
+	/* This method will be called to update a particular department */
+	public Department updateDepartment(Department department) throws ClassNotFoundException, SQLException {
+		if (department.getDept_id() < 0) {
 			return null;
 		}
-		departmentMap.put(department.getDept_id(), department);
+		String query = "update department set dept_name = ?, dept_location =?, dept_expertise =?, dept_size = ? WHERE dept_id="
+				+ department.getDept_id();
+
+		dataServiceHelper.insertDepartmentQuery(query, department);
 		return department;
 	}
-	
-	public Department removeDepartment(Long dept_id)
-	{
+
+	/*
+	 * This method will be called to remove a particular department from the
+	 * database
+	 */
+	public Department removeDepartment(int dept_id) throws ClassNotFoundException, SQLException {
+
+		String query = "delete from department where dept_id=?";
+		dataServiceHelper.deleteDepartment(query, dept_id);
 		return departmentMap.remove(dept_id);
 	}
-	
-	
+
 }

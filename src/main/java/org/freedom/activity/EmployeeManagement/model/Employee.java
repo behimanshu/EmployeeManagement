@@ -5,17 +5,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Employee {
 
-	private long emp_id;
+	private int emp_id;
 	private String emp_lname;
 	private String emp_fname;
 	private String emp_email;
-	private long emp_phone;
+	private double emp_phone;
 	private String emp_gender;
 	private int emp_age;
-	private long emp_YOJ;
-	
-	public Employee(long emp_id, String emp_lname, String emp_fname, String emp_email, long emp_phone,
-			String emp_gender, int emp_age, long emp_YOJ) {
+	private int emp_YOJ;
+	private int dept_id;
+
+	public Employee() {
+
+	}
+
+	public Employee(int emp_id, String emp_lname, String emp_fname, String emp_email, double emp_phone,
+			String emp_gender, int emp_age, int emp_YOJ, int dept_id) {
 		super();
 		this.emp_id = emp_id;
 		this.emp_lname = emp_lname;
@@ -25,17 +30,22 @@ public class Employee {
 		this.emp_gender = emp_gender;
 		this.emp_age = emp_age;
 		this.emp_YOJ = emp_YOJ;
-	}
-	public Employee()
-	{
-		
+		this.dept_id = dept_id;
 	}
 
-	public long getEmp_id() {
+	public int getDept_id() {
+		return dept_id;
+	}
+
+	public void setDept_id(int dept_id) {
+		this.dept_id = dept_id;
+	}
+
+	public int getEmp_id() {
 		return emp_id;
 	}
 
-	public void setEmp_id(long emp_id) {
+	public void setEmp_id(int emp_id) {
 		this.emp_id = emp_id;
 	}
 
@@ -63,11 +73,11 @@ public class Employee {
 		this.emp_email = emp_email;
 	}
 
-	public long getEmp_phone() {
+	public double getEmp_phone() {
 		return emp_phone;
 	}
 
-	public void setEmp_phone(long emp_phone) {
+	public void setEmp_phone(double emp_phone) {
 		this.emp_phone = emp_phone;
 	}
 
@@ -87,17 +97,12 @@ public class Employee {
 		this.emp_age = emp_age;
 	}
 
-	public long getEmp_YOJ() {
+	public int getEmp_YOJ() {
 		return emp_YOJ;
 	}
 
-	public void setEmp_YOJ(long emp_YOJ) {
+	public void setEmp_YOJ(int emp_YOJ) {
 		this.emp_YOJ = emp_YOJ;
 	}
-	
-	
-	
-	
-	
-	
+
 }

@@ -1,5 +1,6 @@
 package org.freedom.activity.EmployeeManagement.resources;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -10,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -22,56 +24,83 @@ import org.freedom.activity.EmployeeManagement.service.DepartmentService;
 @Consumes(MediaType.APPLICATION_JSON)
 public class DepartmentResource {
 
-DepartmentService departmentService = new DepartmentService();
-	
-	
+	DepartmentService departmentService = new DepartmentService();
+
+	/*
+	 * Standard @GET service that would handle the request to get all the
+	 * departments from the database
+	 */
 	@GET
-	public List<Department> getDepartments()
-	{
-		return departmentService.getAllDepartments();
+	public Response getDepartments() throws ClassNotFoundException, SQLException {
+		GenericEntity<List<Department>> entity = new GenericEntity<List<Department>>(
+				departmentService.getAllDepartments()) {
+		};
+		return Response.ok().entity(entity).build();
 	}
-	
-	
+
+	/*
+	 * @GET service to get the department from the database on the basis of a
+	 * particular dept_id
+	 */
+
 	@GET
 	@Path("/{dept_id}")
-	public Department getDepartment(@PathParam("dept_id") long dept_id)
-	{
-		return departmentService.getDepartment(dept_id);
-		
+	public Response getDepartment(@PathParam("dept_id") int dept_id) throws ClassNotFoundException, SQLException {
+
+		return Response.ok().entity(departmentService.getDepartment(dept_id)).build();
 	}
-	
+
+	/* @POST service to create a new department row in the database */
+
 	@POST
-	public Response addDepartment(Department department)
-	{
+	public Response addDepartment(Department department) throws ClassNotFoundException, SQLException {
 		Department newDepartment = departmentService.addDepartment(department);
-		
-		//This returns the right status code, along with the entity that has been added
-		return Response.status(Status.CREATED)		
-				       .entity(newDepartment)
-				       .build();
+
+		// This returns the right status code, along with the entity that has
+		// been added
+		return Response.status(Status.CREATED).entity(newDepartment).build();
 	}
-	
-	
+
+	/* @PUT service to update the contents of a particular department */
+
 	@PUT
 	@Path("/{dept_id}")
-	public Department updateDepartment(@PathParam("dept_id") Long dept_id, Department department)
-	{
+	public Response updateDepartment(@PathParam("dept_id") int dept_id, Department department)
+			throws ClassNotFoundException, SQLException {
 		department.setDept_id(dept_id);
-		return departmentService.updateDepartment(department);
+		GenericEntity<Department> entity = new GenericEntity<Department>(
+				departmentService.updateDepartment(department)) {
+		};
+		return Response.ok().entity(entity).build();
 	}
-	
+
+	/* Unable to implement PATCH in this API service */
+	// @PATCH
+	// @Path("/{dept_id}")
+	// public Department updateDepartmentItem(@PathParam("dept_id") int dept_id,
+	// InputStream is) throws ClassNotFoundException, SQLException
+	// {
+	// //department.setDept_id(dept_id);
+	// return departmentService.updateDepartmentItem(dept_id, is);
+	// }
+
+	/* @DELETE service to delete a particular department from the database */
+
 	@DELETE
 	@Path("/{dept_id}")
-	public void removeDepartment(@PathParam("dept_id") Long dept_id)
-	{
+	public Response removeDepartment(@PathParam("dept_id") int dept_id) throws ClassNotFoundException, SQLException {
 		departmentService.removeDepartment(dept_id);
+		return Response.ok().build();
 	}
-	
+
+	/*
+	 * This method would delegate the request to fetch the employees for
+	 * particular dept_id, from the database
+	 */
+
 	@Path("/{dept_id}/employees")
-	public EmployeeResource getDepartmentWiseEmployees()
-	{
+	public EmployeeResource getDepartmentWiseEmployees() {
 		return new EmployeeResource();
 	}
-	
-	
+
 }

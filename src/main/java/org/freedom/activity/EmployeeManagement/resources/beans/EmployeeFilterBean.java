@@ -3,34 +3,32 @@ package org.freedom.activity.EmployeeManagement.resources.beans;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
+/*Common Bean class to keep a track of all the @Params called in the API call*/
+
 public class EmployeeFilterBean {
-	private @PathParam("dept_id") long dept_id;
-	private @PathParam("emp_id") long emp_id;
-	private @QueryParam("emp_YOJ") long emp_YOJ;
+	private @PathParam("dept_id") int dept_id;
+	private @PathParam("emp_id") int emp_id;
+	private @QueryParam("emp_YOJ") int emp_YOJ;
 	private @QueryParam("emp_gender") String emp_gender;
 	private @QueryParam("emp_age") int emp_age;
 	private @QueryParam("start") int start;
 	private @QueryParam("size") int size;
-	
-	
-	public long getEmp_id() {
-		return emp_id;
-	}
-	public void setEmp_id(long emp_id) {
-		this.emp_id = emp_id;
-	}
-	
-	public long getDept_id() {
+	public int getDept_id() {
 		return dept_id;
 	}
-	public void setDept_id(long dept_id) {
+	public void setDept_id(int dept_id) {
 		this.dept_id = dept_id;
 	}
-	
-	public long getEmp_YOJ() {
+	public int getEmp_id() {
+		return emp_id;
+	}
+	public void setEmp_id(int emp_id) {
+		this.emp_id = emp_id;
+	}
+	public int getEmp_YOJ() {
 		return emp_YOJ;
 	}
-	public void setEmp_YOJ(long emp_YOJ) {
+	public void setEmp_YOJ(int emp_YOJ) {
 		this.emp_YOJ = emp_YOJ;
 	}
 	public String getEmp_gender() {
@@ -57,6 +55,8 @@ public class EmployeeFilterBean {
 	public void setSize(int size) {
 		this.size = size;
 	}
+	
+	
 	
 	
 	

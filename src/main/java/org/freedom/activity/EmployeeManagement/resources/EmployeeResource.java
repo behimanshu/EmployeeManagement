@@ -1,5 +1,6 @@
 package org.freedom.activity.EmployeeManagement.resources;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.ws.rs.BeanParam;
@@ -12,81 +13,129 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import org.freedom.activity.EmployeeManagement.model.Department;
 import org.freedom.activity.EmployeeManagement.model.Employee;
 import org.freedom.activity.EmployeeManagement.resources.beans.EmployeeFilterBean;
 import org.freedom.activity.EmployeeManagement.service.EmployeeService;
 
-
 public class EmployeeResource {
-
+	GenericEntity entity;
 	EmployeeService employeeService = new EmployeeService();
-	
-	
+
+	/*
+	 * @GET service to fetch the employee content of a particular department
+	 * from the database
+	 */
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Employee> getEmployees(@BeanParam EmployeeFilterBean employeeBean)
-	{
+	public Response getEmployees(@BeanParam EmployeeFilterBean employeeBean)
+			throws ClassNotFoundException, SQLException {
 
-		
-		if(employeeBean.getEmp_YOJ()>0)
-		{
-			return employeeService.getEmployeesByYOJ(employeeBean.getDept_id(), employeeBean.getEmp_YOJ());
+		/* Checks if the GET query consists of any filter related to emp_YOJ */
+		if (employeeBean.getEmp_YOJ() > 0) {
+
+			entity = new GenericEntity<List<Employee>>(
+					employeeService.getEmployeesByYOJ(employeeBean.getDept_id(), employeeBean.getEmp_YOJ())) {
+			};
+			return Response.ok().entity(entity).build();
 		}
-//		if(!emp_gender.equals(null))
-//		{
-//			return employeeService.getEmployeesByGender(emp_gender);
-//		}
-		if(employeeBean.getEmp_age()>0)
-		{
-			return employeeService.getEmployeesByAge(employeeBean.getDept_id(), employeeBean.getEmp_age());
+
+		// *Checks if the GET query consists of any filter related to
+		// emp_gender*/
+		if (employeeBean.getEmp_gender() != null) {
+			entity = new GenericEntity<List<Employee>>(
+					employeeService.getEmployeesByGender(employeeBean.getDept_id(), employeeBean.getEmp_gender())) {
+			};
+			return Response.ok().entity(entity).build();
 		}
-		
-		if(employeeBean.getStart()>=0 && employeeBean.getSize()>0)
-		{
-			return employeeService.getAllEmployeesPaginated(employeeBean.getDept_id(), employeeBean.getStart(), employeeBean.getSize());
+		/* Checks if the GET query consists of any filter related to emp_age */
+		if (employeeBean.getEmp_age() > 0) {
+
+			entity = new GenericEntity<List<Employee>>(
+					employeeService.getEmployeesByAge(employeeBean.getDept_id(), employeeBean.getEmp_age())) {
+			};
+			return Response.ok().entity(entity).build();
 		}
-		
-		return employeeService.getAllEmployees(employeeBean.getDept_id());	
+		/* Checks if the GET query consists of any paginated request */
+		if (employeeBean.getStart() >= 0 && employeeBean.getSize() > 0) {
+
+			entity = new GenericEntity<List<Employee>>(employeeService.getAllEmployeesPaginated(
+					employeeBean.getDept_id(), employeeBean.getStart(), employeeBean.getSize())) {
+			};
+
+			return Response.ok().entity(entity).build();
+		}
+
+		entity = new GenericEntity<List<Employee>>(employeeService.getAllEmployees(employeeBean.getDept_id())) {
+		};
+		return Response.ok().entity(entity).build();
+
 	}
-	
-	
+
+	/*
+	 * @GET service to fetch the employee content of a particular emp_id from
+	 * the database
+	 */
+
 	@GET
 	@Path("/{emp_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	
-	public Employee getEmployee(@BeanParam EmployeeFilterBean employeeBean)
-	{
-		return employeeService.getEmployee(employeeBean.getDept_id(), employeeBean.getEmp_id());
-		
+
+	public Response getEmployee(@BeanParam EmployeeFilterBean employeeBean)
+			throws ClassNotFoundException, SQLException {
+
+		entity = new GenericEntity<Employee>(
+				employeeService.getEmployee(employeeBean.getDept_id(), employeeBean.getEmp_id())) {
+		};
+		return Response.ok().entity(entity).build();
 	}
-	
+
+	/* @POST service to create a new employee in a particular department */
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Employee addEmployee(@BeanParam EmployeeFilterBean employeeBean, Employee employee)
-	{
-		return employeeService.addEmployee(employeeBean.getDept_id(), employee);
+	public Response addEmployee(@BeanParam EmployeeFilterBean employeeBean, Employee employee)
+			throws ClassNotFoundException, SQLException {
+
+		entity = new GenericEntity<Employee>(employeeService.addEmployee(employeeBean.getDept_id(), employee)) {
+		};
+		return Response.ok().entity(entity).build();
+
 	}
-	
-	
+
+	/*
+	 * @PUT service to update a particular employee in a particular department
+	 */
+
 	@PUT
 	@Path("/{emp_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Employee updateEmployee(@BeanParam EmployeeFilterBean employeeBean, Employee employee)
-	{
+	public Response updateEmployee(@BeanParam EmployeeFilterBean employeeBean, Employee employee)
+			throws ClassNotFoundException, SQLException {
 		employee.setEmp_id(employeeBean.getEmp_id());
-		return employeeService.updateEmployee(employeeBean.getDept_id(), employee);
+
+		entity = new GenericEntity<Employee>(employeeService.updateEmployee(employeeBean.getDept_id(), employee)) {
+		};
+		return Response.ok().entity(entity).build();
+
 	}
-	
+
+	/* @DELETE service to delete a particular employee from a department */
+
 	@DELETE
 	@Path("/{emp_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void removeEmployee(@BeanParam EmployeeFilterBean employeeBean)
-	{
+	public Response removeEmployee(@BeanParam EmployeeFilterBean employeeBean)
+			throws ClassNotFoundException, SQLException {
 		employeeService.removeEmployee(employeeBean.getDept_id(), employeeBean.getEmp_id());
+		return Response.ok().build();
 	}
-		
+
 }

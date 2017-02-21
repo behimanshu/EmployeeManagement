@@ -22,8 +22,9 @@ import org.freedom.activity.EmployeeManagement.model.Department;
 import org.freedom.activity.EmployeeManagement.model.Employee;
 import org.freedom.activity.EmployeeManagement.resources.beans.EmployeeFilterBean;
 import org.freedom.activity.EmployeeManagement.service.EmployeeService;
+import org.glassfish.jersey.server.ResourceConfig;
 
-public class EmployeeResource {
+public class EmployeeResource extends ResourceConfig{
 	GenericEntity entity;
 	EmployeeService employeeService = new EmployeeService();
 	private Logger logger = Logger.getLogger(EmployeeResource.class);
